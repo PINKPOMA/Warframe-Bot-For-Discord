@@ -305,6 +305,7 @@ async def 근접(ctx, meele):
     print(Melle)
     if Meele_response.status_code == 200:
         embed = discord.Embed(title=meele + "정보", color=0xceb8ff)
+        embed.set_thumbnail(url="https://i.imgur.com/aVby7S2.png")
         embed.add_field(name="무기 이름", value=meele, inline=False)
         embed.add_field(name="공격 속도", value=Melle['attacks'][0]['speed'], inline=False)
         embed.add_field(name="크리티컬 확률", value=str(Melle['attacks'][0]['crit_chance']) + "%", inline=True)
@@ -327,6 +328,7 @@ async def 원거리(ctx, Cowgun):
     CCowgun = rmswjq[0]
     if Cowgun_response.status_code == 200:
         embed = discord.Embed(title=Cowgun + "정보", color=0xffd8e9)
+        embed.set_thumbnail(url="https://i.imgur.com/aVby7S2.png")
         embed.add_field(name="무기 이름", value=Cowgun,inline=False)
         embed.add_field(name="치명타 확률", value=str(CCowgun['attacks'][0]['crit_chance']) + "%",inline=True)
         embed.add_field(name="치명타 배수", value=CCowgun['attacks'][0]['crit_mult'],inline=True)
@@ -348,8 +350,9 @@ async def 초대(ctx):
 @bot.command()
 async def 도움(ctx):
     embed = discord.Embed(title='도움말', description='전체 명령어를 보여줍니다', color=0xFF80ED)
-    embed.set_author(name="제작: PINK_POMA#6293", url="https://github.com/PINKPOMA",
+    embed.set_author(name="제작: PINK_POMA#6293", url="https://github.com/PINKPOMA/Warframe-Bot-For-Discord",
                      icon_url="https://i.imgur.com/JwsP1Ay.png")
+    embed.set_thumbnail(url="https://i.imgur.com/aVby7S2.png")
     embed.add_field(name="침공", value="레이저백과 포모리안의 건설 현황을 보여줍니다\n",inline=False)
     embed.add_field(name="강철의길", value="이번주 강철의 길 훈장의 아이템을 보여줍니다\n",inline=False)
     embed.add_field(name="아이돌론평원", value="아이돌론평원의 현재 주기를 알려줍니다\n",inline=False)
