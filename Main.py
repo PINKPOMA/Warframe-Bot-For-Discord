@@ -10,6 +10,7 @@ from itertools import cycle
 status = cycle(["워프레임", "< 도움으로 사용 가능합니다", "개발자: PINK_POMA#6293"])
 bot = commands.Bot(command_prefix='< ')
 Url = 'https://api.warframestat.us/pc/ko'
+QUrl = 'https://api.warframestat.us/'
 
 
 @bot.event
@@ -294,10 +295,55 @@ async def 키티어(ctx):
 
 
 @bot.command()
+async def 근접(ctx, meele):
+    meele = re.sub('_', ' ', meele)
+    Meele_response = requests.get(QUrl + 'weapons/search/' + meele)
+    Mtext = Meele_response.text
+    rmswjq = json.loads(Mtext)
+    Melle = rmswjq[0]
+    print(meele)
+    print(Melle)
+    if Meele_response.status_code == 200:
+        embed = discord.Embed(title=meele + "정보", color=0xceb8ff)
+        embed.add_field(name="무기 이름", value=meele, inline=False)
+        embed.add_field(name="공격 속도", value=Melle['attacks'][0]['speed'], inline=False)
+        embed.add_field(name="크리티컬 확률", value=str(Melle['attacks'][0]['crit_chance']) + "%", inline=True)
+        embed.add_field(name="크리티컬 배수", value=str(Melle['attacks'][0]['crit_mult']) + "배", inline=True)
+        embed.add_field(name="상태이상 확률", value=str(Melle['attacks'][0]['status_chance']) + "%", inline=True)
+        embed.add_field(name="슬라이드 공격", value=str(Melle['attacks'][0]['slide']), inline=False)
+        embed.add_field(name="지면 강타 공격", value=str(Melle['attacks'][0]['slam']['radial']['damage']), inline=True)
+        embed.add_field(name="지면 강타 범위", value=str(Melle['attacks'][0]['slam']['radial']['radius']), inline=True)
+        embed.add_field(name="무기 속성", value=str(Melle['attacks'][0]['slam']['radial']['element']), inline=False)
+        embed.add_field(name="막기 각도", value=str(Melle['blockingAngle']), inline=False)
+        await ctx.send(embed=embed)
+
+
+@bot.command()
+async def 원거리(ctx, Cowgun):
+    Cowgun = re.sub('_', ' ', Cowgun)
+    Cowgun_response = requests.get(QUrl + 'weapons/search/' + Cowgun)
+    Ctext = Cowgun_response.text
+    rmswjq = json.loads(Ctext)
+    CCowgun = rmswjq[0]
+    if Cowgun_response.status_code == 200:
+        embed = discord.Embed(title=Cowgun + "정보", color=0xffd8e9)
+        embed.add_field(name="무기 이름", value=Cowgun,inline=False)
+        embed.add_field(name="치명타 확률", value=str(CCowgun['attacks'][0]['crit_chance']) + "%",inline=True)
+        embed.add_field(name="치명타 배수", value=CCowgun['attacks'][0]['crit_mult'],inline=True)
+        embed.add_field(name="상태이상 확률", value=str(CCowgun['attacks'][0]['status_chance']) + "%",inline=True)
+        embed.add_field(name="무기 정확도", value=str(CCowgun['accuracy']) + "%",inline=True)
+        embed.add_field(name="무기 기본 탄약", value=CCowgun['ammo'],inline=True)
+        embed.add_field(name="연사력", value=CCowgun['attacks'][0]['speed'],inline=False)
+        embed.add_field(name="발사 형식",value=CCowgun['attacks'][0]['shot_type'],inline=True)
+        await ctx.send(embed=embed)
+
+
+@bot.command()
 async def 초대(ctx):
     embed=discord.Embed(title='초대 링크', color=0xff8821)
-    embed.add_field(name="https://discord.com/oauth2/authorize?client_id=923064131412713552&permissions=8&scope=bot",inline=False)
+    embed.add_field(name="https://discord.com/oauth2/authorize?client_id=923064131412713552&permissions=8&scope=bot", value="많은 초대 부탁드립니다(__)",inline=False)
     await ctx.send(embed=embed)
+
 
 @bot.command()
 async def 도움(ctx):
@@ -314,6 +360,8 @@ async def 도움(ctx):
     embed.add_field(name="다르보", value="다르보의 상품을 보여줍니다\n",inline=False)
     embed.add_field(name="지구", value="지구의 시간을 알려줍니다\n",inline=False)
     embed.add_field(name="초대", value="봇 초대 코드를 보내드립니다",inline=False)
+    embed.add_field(name="원거리(영어)", value="주,보조 무기의 스탯을 보여줍니다(띄어쓰기 대신 _를 이용해 주세요)",inline=False)
+    embed.add_field(name="근접(영어)", value="근접 무기의 스탯을 보여줍니다(띄어쓰기 대신 _를 이용해 주세요)",inline=False)
     await ctx.send(embed=embed)
 
 
